@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt.mapper.RegisterMapper">
+
+    <insert id="insert" parameterType="VertificationCode">
+        insert into login_info values(default,#{telephone})
+    </insert>
+
+    <select id="selectOne" resultType="VertificationCode">
+        select * from login_info where telephone=#{telephone}
+    </select>
+
+    <select id="selectCode" resultType="VertificationCode">
+        select * from code where telephone=#{telephone}
+    </select>
+
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt.mapper.StudentMapper">
+
+    <select id="selectAll" resultMap="rm1">
+        select * from student
+    </select>
+
+    <resultMap id="rm1" type="student">
+        <!-- column: 数据库的列名 property:实体的属性名-->
+        <!-- 如果数据库的列名和实体类中的属性名一致,就可以省去该标签
+             但是公共字段和主键不建议省去
+        -->
+        <id column="sid" property="sid"></id>
+<!--        <result column="sname" property="sname"></result>-->
+        <result column="clazzno" property="clazzno"></result>
+        <!--
+            select * from clazz where clazzno=?
+            select :执行哪一个方法
+            column: 希望查询的哪一列作为参数进行传递
+            javaType: 返回值的类型
+            property : 把返回的结果赋值给对象中的哪个属性
+        -->
+        <association select="com.bjsxt.mapper.ClazzMapper.selectOne" column="clazzno"  javaType="clazz" property="cla" ></association>
+    </resultMap>
+
+    <select id="selectMore" resultType="student">
+        select * from student where clazzno=#{param1}
+    </select>
+
+    <select id="selectAll2" resultMap="rm2">
+        select * from student s join clazz c on s.clazzno=c.clazzno
+    </select>
+
+    <resultMap id="rm2" type="student">
+        <!-- 注意 : 书写的每一个值就是接收数据库查询的数据
+                    所以想要接收的数据的字段不可以省略
+        -->
+        <id column="sid" property="sid"></id>
+        <result column="sname" property="sname"></result>
+
+        <association property="cla" javaType="clazz">
+            <id column="clazzno" property="clazzno"></id>
+            <result column="cname" property="cname"></result>
+        </association>
+    </resultMap>
+
+</mapper>

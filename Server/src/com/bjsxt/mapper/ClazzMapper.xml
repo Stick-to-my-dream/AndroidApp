@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt.mapper.ClazzMapper">
+
+    <!-- 启动mybatis的二级缓存-->
+    <cache readOnly="true"></cache>
+
+    <select id="selectOne" resultType="clazz">
+        select * from clazz where clazzno=#{param1}
+    </select>
+
+    <select id="selectAll" resultMap="rm1">
+        select * from clazz
+    </select>
+
+    <resultMap id="rm1" type="clazz">
+        <id column="clazzno" property="clazzno"></id>
+        <result column="cname" property="cname"></result>
+        <!--
+            select:调用哪一个xml中的方法
+            column:希望哪一列作为参数进行传递
+            ofType:集合的泛型
+            property:把返回的数据整体赋值给哪一个属性
+         -->
+        <collection select="com.bjsxt.mapper.StudentMapper.selectMore" column="clazzno" ofType="student" property="list"></collection>
+    </resultMap>
+
+    <select id="selectAll2" resultMap="rm2">
+        select * from clazz c join student s on s.clazzno=c.clazzno
+    </select>
+
+    <resultMap id="rm2" type="clazz">
+        <id column="clazzno" property="clazzno"></id>
+        <id column="cname" property="cname"></id>
+
+        <collection property="list" ofType="student">
+            <id column="sid" property="sid"></id>
+            <result column="sname" property="sname"></result>
+        </collection>
+    </resultMap>
+
+</mapper>
